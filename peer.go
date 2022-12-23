@@ -2,6 +2,7 @@ package main
 // This template draws inspiration from the following source:
 // github.com/lucasfth/go-ass4
 // Which was created by chbl, fefa and luha
+// The template itself was created by chbl and luha
 
 import (
 	request "github.com/lucasfth/disys-exam-peer-to-peer/grpc"
