@@ -4,7 +4,7 @@ package main
 // Which was created by chbl, fefa and luha
 
 import (
-	request "Lucasfth/disys-exam-peer-to-peer/grpc/grpc"
+	request "github.com/lucasfth/disys-exam-peer-to-peer/grpc"
 	"context"
 	"fmt"
 	"log"

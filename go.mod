@@ -1,4 +1,4 @@
-module test3
+module github.com/lucasfth/disys-exam-peer-to-peer
 
 go 1.19
 
