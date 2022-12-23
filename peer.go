@@ -60,7 +60,24 @@ func main() {
 		}
 	}()
 
-	p.connectToPeers() // Will not finish until all peers are connected
+	// Connecting to peers
+	for i := 0; i < 3; i++ {
+		port := int32(5000) + int32(i+1)
+
+		if port == p.port {
+			continue
+		}
+
+		var conn *grpc.ClientConn
+		log.Printf("Trying to dial: %v\n", port)
+		conn, err := grpc.Dial(fmt.Sprintf(":%v", port), grpc.WithInsecure(), grpc.WithBlock())
+		if err != nil {
+			log.Fatalf("Could not connect: %s", err)
+		}
+		defer conn.Close()
+		c := request.NewRequestServiceClient(conn)
+		p.peers[port] = c
+	}
 
 	p.interactWithPeers()
 }
@@ -107,25 +124,6 @@ func (p *peer) criticalSection() {
 	time.Sleep(2 * time.Second)
 }
 
-func (p *peer) connectToPeers() {
-	for i := 0; i < 3; i++ {
-		port := int32(5000) + int32(i+1)
-
-		if port == p.port {
-			continue
-		}
-
-		var conn *grpc.ClientConn
-		log.Printf("Trying to dial: %v\n", port)
-		conn, err := grpc.Dial(fmt.Sprintf(":%v", port), grpc.WithInsecure(), grpc.WithBlock())
-		if err != nil {
-			log.Fatalf("Could not connect: %s", err)
-		}
-		defer conn.Close()
-		c := request.NewRequestServiceClient(conn)
-		p.peers[port] = c
-	}
-}
 
 func (p *peer) Request(ctx context.Context, req *request.Request) (*request.Reply, error) {
 	id := req.Id
